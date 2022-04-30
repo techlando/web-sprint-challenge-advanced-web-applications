@@ -6,14 +6,14 @@ import axios from "axios";
 export default function Articles(props) {
   // ✨ where are my props? Destructure them here
   // const [articles, setArticles] = useState([])
-  const  { setValues, values, setArticleToEdit, articleToEdit, deleteArticle, postArticle, articles, setArticles, updateArticle, getArticles, message, setMessage, setCurrentArticleId } = props
+  const  { setValues,  setArticleToEdit, deleteArticle, articles, setArticles, setMessage, setCurrentArticleId } = props
 
   // ✨ implement conditional logic: if no token exists
   // we should render a Navigate to login screen (React Router v.6)
 
   useEffect(() => {
     // ✨ grab the articles here, on first render only
-    // getArticles()
+    
     const token = localStorage.getItem("token")
     axios.get("http://localhost:9000/api/articles", {
       headers: {
@@ -21,7 +21,7 @@ export default function Articles(props) {
       }
     })
     .then(res => {
-      // console.log(res)
+      
       setArticles(res.data.articles)
       setMessage(res.data.message)
     })
@@ -45,9 +45,7 @@ export default function Articles(props) {
       <h2>Articles</h2>
       {
         articles.length === 0 ? 'No articles yet' :
-        // !articles.length(1)
-        //   ? 'No articles yet'
-        //   :
+      
            articles.map(art => {
             return (
               <div className="article" 
@@ -69,7 +67,7 @@ export default function Articles(props) {
     </div>
   )
 }
-// updateArticle(art.article_id, art)
+
 // 🔥 No touchy: Articles expects the following props exactly:
 Articles.propTypes = {
   articles: PT.arrayOf(PT.shape({ // the array can be empty

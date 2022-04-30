@@ -8,9 +8,9 @@ export default function ArticleForm(props) {
   // const [values, setValues] = useState(initialFormValues)
   // ✨ where are my props? Destructure them here
 
-  const {  values, setValues, articleToEdit, setArticleToEdit, articles, setArticles, setMessage, message, currentArticle, currentArticleId, postArticle, updateArticle } = props
+  const {  values, setValues, articleToEdit, setArticleToEdit, currentArticleId, postArticle, updateArticle } = props
   
-//  console.log(props)
+
 
   useEffect(() => {
     
@@ -27,19 +27,18 @@ export default function ArticleForm(props) {
 
   const onSubmit = evt => {
   if(articleToEdit === true ){
-    console.log("happy path")
+    
     updateArticle(currentArticleId, values)
     
   } else {
      postArticle(values)
       setValues(initialFormValues);
-    console.log("here i am sad")
+    
   }
     evt.preventDefault()
    
    
-      // postArticle(values)
-      // setValues(initialFormValues);
+      
 
    
   }
@@ -70,7 +69,7 @@ export default function ArticleForm(props) {
        {articleToEdit ? 
          <h2>Edit Article</h2> : <h2>Create Article</h2>
        }
-      {/* <h2>Create Article</h2> */}
+      
       <input
         maxLength={50}
         onChange={onChange}
@@ -91,11 +90,11 @@ export default function ArticleForm(props) {
         <option value="React">React</option>
         <option value="Node">Node</option>
       </select>
-      {/* <div className="button-group">  */}
+      
 
       {!articleToEdit ? <div className="button-group"> 
        <button  disabled={!values.text } id="submitArticle">Submit</button> </div>
-      //  <button onClick={cancelEdit}>Cancel edit</button> 
+     
       :
       <div className="button-group"> 
        <button  disabled={!values.text } id="submitArticle">Submit</button>
@@ -103,7 +102,7 @@ export default function ArticleForm(props) {
        </div> }
         
         
-      {/* </div> */}
+      
     </form>
   </div>
   )

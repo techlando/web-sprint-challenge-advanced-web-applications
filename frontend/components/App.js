@@ -8,7 +8,7 @@ import Spinner from './Spinner'
 import axios from "axios"
 
 
-import ProtectedRoute from "./ProtectedRoute";
+
 
 
 
@@ -55,7 +55,7 @@ navigate("articles") }
 
       navigate("/")
       setMessage('Goodbye!')
-      // redirectToLogin()
+      
      
       localStorage.removeItem("token")
       
@@ -104,9 +104,9 @@ navigate("articles") }
       }
     })
     .then(res => {
-      // console.log(res)
+      
       setArticles(res.data.articles)
-      // setMessage(res.data.message)
+      
       setSpinnerOn(false)
     })
     .catch(err => {
@@ -134,7 +134,7 @@ navigate("articles") }
       
       
       getArticles()
-      // setValues(initialFormValues)
+      
       setMessage(res.data.message)
       
       
@@ -191,22 +191,13 @@ navigate("articles") }
     .catch(err => {
       console.log(err)
     })
-    // .axios.get("http://localhost:9000/api/articles")
-    // .then(res => {
-    //   // console.log(res)
-    //   setArticles(res.data.articles)
-    //   // setMessage(res.data.message)
-     
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    // })
+    
   }
   
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <React.StrictMode>
-      <Spinner />
+      <Spinner on={spinnerOn}/>
       <Message message={message} setMessage={setMessage}/>
       <button id="logout" onClick={logout}>Logout from app</button>
       <div id="wrapper" style={{ opacity: spinnerOn ? "0.25" : "1" }}> {/* <-- do not change this line */}
@@ -219,12 +210,7 @@ navigate("articles") }
         <Routes>
           <Route path="/" element={<LoginForm login={login}/>} />
 
-          {/* <ProtectedRoute path="articles" >
-            <ArticleForm/>
-            
-          </ProtectedRoute> */}
-          {/* <ProtectedRoute exact path="articles" component={ArticleForm} /> */}
-          {/* <ProtectedRoute exact path="articles" component={Articles} /> */}
+          
           <Route path="articles" element={
             <>
               

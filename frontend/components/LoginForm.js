@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PT from 'prop-types'
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom"
 
 const initialFormValues = {
@@ -26,19 +26,7 @@ export default function LoginForm(props) {
     evt.preventDefault()
     // ✨ implement
     login(values)
-    // axios.post("http://localhost:9000/api/login", values)
-    // .then(res => {
-    //   console.log(res)
-    //   localStorage.setItem("token", res.data.token)
-      
-    //   navigate("articles")
-    //   console.log(res.data.message)
-    //   console.log(props)
-    //   setMessage(res.data.message)
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    // })
+    
   }
   
   const isDisabled = () => {
