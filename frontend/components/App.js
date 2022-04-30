@@ -37,6 +37,22 @@ export default function App() {
     // and a message saying "Goodbye!" should be set in its proper state.
     // In any case, we should redirect the browser back to the login screen,
     // using the helper above.
+
+   
+
+    const token = localStorage.getItem("token")
+    axios.post("http://localhost:9000/api/articles", {
+      headers: {
+        authorization: token
+      }
+    })
+    .then(res => {
+      console.log(res)
+      // localStorage.removeItem("token")
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
   const login = ({ username, password }) => {

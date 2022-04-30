@@ -19,6 +19,7 @@ export default function LoginForm(props) {
     const { id, value } = evt.target
     setValues({ ...values, [id]: value })
     
+    
   }
   
   const onSubmit = evt => {
@@ -45,6 +46,12 @@ export default function LoginForm(props) {
     // Trimmed username must be >= 3, and
     // trimmed password must be >= 8 for
     // the button to become enabled
+    if(values.username.trim().length >= 3 && values.password.trim().length >= 8) {
+      return false 
+     
+    } else {
+      return true
+    }
   }
 
   return (
@@ -58,13 +65,14 @@ export default function LoginForm(props) {
         id="username"
       />
       <input
+      
         maxLength={20}
         value={values.password}
         onChange={onChange}
         placeholder="Enter password"
         id="password"
       />
-      <button disabled={!values.username && !values.password} id="submitCredentials">Submit credentials</button>
+      <button disabled={isDisabled()} id="submitCredentials">Submit credentials</button>
     </form>
   )
 }
