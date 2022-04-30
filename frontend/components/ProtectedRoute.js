@@ -1,16 +1,17 @@
 import React from "react";
-import { Route, useNavigate } from "react-router-dom";
+import { Route, Navigate, outlet } from "react-router-dom";
 
 
-const ProtectedRoute = (props) => {
-    const { children, ...rest } = props
+const ProtectedRoute = ({component: Component, ...rest}) => {
+    // const { children, ...rest } = props
+    
     
     return (
-        <Route { ...rest } render={() => {
+        <Route { ...rest } render={(props) => {
             if(localStorage.getItem("token")){
-                return children
+                return <Component {...props} />
             } else {
-                <useNavigate to="/"/>
+                return  <Navigate to="/login" />;
             }
         }}/>
     )

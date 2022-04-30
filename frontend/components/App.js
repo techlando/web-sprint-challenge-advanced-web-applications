@@ -7,7 +7,10 @@ import ArticleForm from './ArticleForm'
 import Spinner from './Spinner'
 import axios from "axios"
 
+
 import ProtectedRoute from "./ProtectedRoute";
+
+
 
 const articlesUrl = 'http://localhost:9000/api/articles'
 const loginUrl = 'http://localhost:9000/api/login'
@@ -28,8 +31,18 @@ export default function App() {
 
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
-  const redirectToLogin = () => { /* ✨ implement */ }
-  const redirectToArticles = () => { /* ✨ implement */ }
+  const redirectToLogin = () => { /* ✨ implement */ 
+  const token = localStorage.getItem("token")
+  
+  if(!token){
+    return navigate("/")
+  } else {
+     return navigate("articles")
+  }
+// navigate("/")
+}
+  const redirectToArticles = () => { /* ✨ implement */
+navigate("articles") }
 
   const logout = () => {
     // ✨ implement
@@ -40,19 +53,13 @@ export default function App() {
 
    
 
-    const token = localStorage.getItem("token")
-    axios.post("http://localhost:9000/api/articles", {
-      headers: {
-        authorization: token
-      }
-    })
-    .then(res => {
-      console.log(res)
-      // localStorage.removeItem("token")
-    })
-    .catch(err => {
-      console.log(err)
-    })
+  
+      setMessage("Goobye!.")
+      // redirectToLogin()
+      navigate("/")
+      localStorage.removeItem("token")
+      
+   
   }
 
   const login = ({ username, password }) => {
@@ -107,6 +114,7 @@ export default function App() {
     })
 
   }
+
 
   const postArticle = ({title, text, topic }) => {
     // ✨ implement
@@ -205,8 +213,9 @@ export default function App() {
         <h1>Advanced Web Applications</h1>
         <nav>
           <NavLink id="loginScreen" to="/">Login</NavLink>
-          <NavLink id="articlesScreen" to="/articles">Articles</NavLink>
+          <NavLink  id="articlesScreen" to={redirectToLogin}>Articles</NavLink>
         </nav>
+       
         <Routes>
           <Route path="/" element={<LoginForm login={login}/>} />
 
@@ -214,6 +223,8 @@ export default function App() {
             <ArticleForm/>
             
           </ProtectedRoute> */}
+          {/* <ProtectedRoute exact path="articles" component={ArticleForm} /> */}
+          {/* <ProtectedRoute exact path="articles" component={Articles} /> */}
           <Route path="articles" element={
             <>
               
@@ -222,6 +233,7 @@ export default function App() {
             </>
           } />
         </Routes>
+        
         <footer>Bloom Institute of Technology 2022</footer>
       </div>
     </React.StrictMode>
