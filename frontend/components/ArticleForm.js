@@ -8,11 +8,12 @@ export default function ArticleForm(props) {
   const [values, setValues] = useState(initialFormValues)
   // ✨ where are my props? Destructure them here
 
-  const { articles, setArticles, setMessage, message } = props
+  const { articles, setArticles, setMessage, message, currentArticle, currentArticleId, postArticle, updateArticle } = props
   
 
 
   useEffect(() => {
+    
     // ✨ implement
     // Every time the `currentArticle` prop changes, we should check it for truthiness:
     // if it's truthy, we should set its title, text and topic into the corresponding
@@ -25,22 +26,24 @@ export default function ArticleForm(props) {
   }
 
   const onSubmit = evt => {
-    const token = localStorage.getItem("token")
+    
     evt.preventDefault()
+    postArticle(values)
+    setValues(initialFormValues);
     // ✨ implement
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
-    axios.post("http://localhost:9000/api/articles", values, {
-      headers: {
-        authorization: token
-      }
-    })
-    .then(res => {
+    // axios.post("http://localhost:9000/api/articles", values, {
+    //   headers: {
+    //     authorization: token
+    //   }
+    // })
+    // .then(res => {
       
-      console.log(res.data.article.article_id)
-      setArticles(articles.map(art => {
-        console.log(art)
-      }))
+      // console.log(res.data.article.article_id)
+      // setArticles(articles.map(art => {
+      //   console.log(art)
+      // }))
      
       
       // console.log(articles)
@@ -53,13 +56,27 @@ export default function ArticleForm(props) {
       //   // }
       // })
       // )
-      setMessage(res.data.message)
+      // setMessage(res.data.message)
       // setValues(initialFormValues)
-    })
-    .catch(err => {
-      console.log(err)
-    })
-
+      
+    // })
+    // .catch(err => {
+    //   console.log(err)
+    // })
+   
+    // axios.get("http://localhost:9000/api/articles", {
+    //   headers: {
+    //     authorization: token
+    //   }
+    // })
+    // .then(res => {
+      // console.log(res)
+      // setArticles(res.data.articles)
+      // setMessage(res.data.message)
+    // })
+    // .catch(err => {
+    //   console.log(err)
+    // })
 
    
   }

@@ -20,6 +20,8 @@ export default function App() {
   const [currentArticleId, setCurrentArticleId] = useState()
   const [spinnerOn, setSpinnerOn] = useState(false)
 
+
+
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
   const redirectToLogin = () => { /* ✨ implement */ }
@@ -40,6 +42,21 @@ export default function App() {
     // On success, we should set the token to local storage in a 'token' key,
     // put the server success message in its proper state, and redirect
     // to the Articles screen. Don't forget to turn off the spinner!
+    setSpinnerOn(true)
+    axios.post("http://localhost:9000/api/login", {username, password })
+    .then(res => {
+      console.log(res)
+      localStorage.setItem("token", res.data.token)
+      setMessage(res.data.message)
+      navigate("articles")
+      
+     
+     
+      setSpinnerOn(false)
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
   const getArticles = () => {
@@ -51,44 +68,102 @@ export default function App() {
     // If something goes wrong, check the status of the response:
     // if it's a 401 the token might have gone bad, and we should redirect to login.
     // Don't forget to turn off the spinner!
+    setMessage("")
+    setSpinnerOn(true)
+    const token = localStorage.getItem("token")
+    axios.get("http://localhost:9000/api/articles", {
+      headers: {
+        authorization: token
+      }
+    })
+    .then(res => {
+      // console.log(res)
+      setArticles(res.data.articles)
+      // setMessage(res.data.message)
+      setSpinnerOn(false)
+    })
+    .catch(err => {
+      console.log(err)
+    })
 
   }
 
-  const postArticle = article => {
+  const postArticle = ({title, text, topic }) => {
     // ✨ implement
     // The flow is very similar to the `getArticles` function.
     // You'll know what to do! Use log statements or breakpoints
     // to inspect the response from the server.
+    setSpinnerOn(true)
+    setMessage("")
+    const token = localStorage.getItem("token")
+    axios.post("http://localhost:9000/api/articles", {title, text, topic}, {
+      headers: {
+        authorization: token
+      }
+    })
+    .then(res => {
+      
+      
+      
+      getArticles()
+      // setValues(initialFormValues)
+      setMessage(res.data.message)
+      
+      
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    
   }
 
-  const updateArticle = ({ article_id, article }) => {
+  const updateArticle = ( article_id, title, text, topic ) => {
     // ✨ implement
     // You got this!
-   
-    
     const token = localStorage.getItem("token")
-    axios.put(`http://localhost:9000/api/articles/${article_id}`, article,  {
+    
+    axios.put(`http://localhost:9000/api/articles/${article_id}`, title, text, topic, {
       headers: {
         authorization: token
       }
     })
     .then(res => {
       console.log(res)
-    //   updateArticle(articles.map((article) => {
-    //     if(article_id === res.data.id) {return res.data;
-    //     } else {
-    //       return article;
-    //     }
-    //   })
-    // )
-  })
+    })
     .catch(err => {
       console.log(err)
     })
+    
   }
 
   const deleteArticle = article_id => {
     // ✨ implement
+    const token = localStorage.getItem("token")
+    axios.delete(`http://localhost:9000/api/articles/${article_id}`, {
+      headers: {
+        authorization:token
+      }
+    })
+    .then(res => {
+      console.log(res)
+      
+      getArticles()
+      setMessage(res.data.message)
+      
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    // .axios.get("http://localhost:9000/api/articles")
+    // .then(res => {
+    //   // console.log(res)
+    //   setArticles(res.data.articles)
+    //   // setMessage(res.data.message)
+     
+    // })
+    // .catch(err => {
+    //   console.log(err)
+    // })
   }
   
   return (
@@ -104,7 +179,7 @@ export default function App() {
           <NavLink id="articlesScreen" to="/articles">Articles</NavLink>
         </nav>
         <Routes>
-          <Route path="/" element={<LoginForm />} />
+          <Route path="/" element={<LoginForm login={login}/>} />
 
           {/* <ProtectedRoute path="articles" >
             <ArticleForm/>
@@ -112,8 +187,9 @@ export default function App() {
           </ProtectedRoute> */}
           <Route path="articles" element={
             <>
-              <ArticleForm  message={message} setMessage={setMessage} updateArticle={updateArticle} articles={articles} setArticles={setArticles}/>
-              <Articles message={message} setMessage={setMessage} updateArticle={updateArticle} articles={articles} setArticles={setArticles}/>
+              
+              <ArticleForm  postArticle={postArticle} currentArticle={currentArticleId} setCurrentArticleId={setCurrentArticleId} message={message} setMessage={setMessage} updateArticle={updateArticle} articles={articles} setArticles={setArticles}/>
+              <Articles  deleteArticle={deleteArticle}postArticle={postArticle} message={message} getArticles={getArticles} setMessage={setMessage}  articles={articles} setArticles={setArticles} updateArticle={updateArticle}/>
             </>
           } />
         </Routes>

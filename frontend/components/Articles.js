@@ -6,13 +6,14 @@ import axios from "axios";
 export default function Articles(props) {
   // ✨ where are my props? Destructure them here
   // const [articles, setArticles] = useState([])
-  const  { articles, setArticles, updateArticle, message, setMessage } = props
-// console.log(props)
+  const  { deleteArticle, postArticle, articles, setArticles, updateArticle, getArticles, message, setMessage } = props
+
   // ✨ implement conditional logic: if no token exists
   // we should render a Navigate to login screen (React Router v.6)
 
   useEffect(() => {
     // ✨ grab the articles here, on first render only
+    // getArticles()
     const token = localStorage.getItem("token")
     axios.get("http://localhost:9000/api/articles", {
       headers: {
@@ -50,8 +51,8 @@ export default function Articles(props) {
                   <p>Topic: {art.topic}</p>
                 </div>
                 <div>
-                  <button disabled={false} onClick={updateArticle}>Edit</button>
-                  <button disabled={false} onClick={updateArticle}>Delete</button>
+                  <button disabled={false} onClick={()=>updateArticle(art.article_id, art.title, art.text, art.topic)}>Edit</button>
+                  <button disabled={false} onClick={()=>deleteArticle(art.article_id)}>Delete</button>
                 </div>
               </div>
             )
