@@ -53,10 +53,10 @@ navigate("articles") }
 
    
 
-  
-      setMessage("Goobye!.")
-      // redirectToLogin()
       navigate("/")
+      setMessage('Goodbye!')
+      // redirectToLogin()
+     
       localStorage.removeItem("token")
       
    
