@@ -6,7 +6,7 @@ import axios from "axios";
 export default function Articles(props) {
   // ✨ where are my props? Destructure them here
   // const [articles, setArticles] = useState([])
-  const  { deleteArticle, postArticle, articles, setArticles, updateArticle, getArticles, message, setMessage } = props
+  const  { setValues, values, setArticleToEdit, articleToEdit, deleteArticle, postArticle, articles, setArticles, updateArticle, getArticles, message, setMessage, setCurrentArticleId } = props
 
   // ✨ implement conditional logic: if no token exists
   // we should render a Navigate to login screen (React Router v.6)
@@ -30,6 +30,14 @@ export default function Articles(props) {
     })
   }, [])
 
+  const handleClick = (article, article_id) => {
+    
+    setArticleToEdit(true)
+    setValues(article)
+    setCurrentArticleId(article_id)
+
+  }
+
   return (
     // ✨ fix the JSX: replace `Function.prototype` with actual functions
     // and use the articles prop to generate articles
@@ -51,7 +59,7 @@ export default function Articles(props) {
                   <p>Topic: {art.topic}</p>
                 </div>
                 <div>
-                  <button disabled={false} onClick={()=>updateArticle(art.article_id, art.title, art.text, art.topic)}>Edit</button>
+                  <button disabled={false} onClick={()=>handleClick(art, art.article_id)}>Edit</button>
                   <button disabled={false} onClick={()=>deleteArticle(art.article_id)}>Delete</button>
                 </div>
               </div>
@@ -61,7 +69,7 @@ export default function Articles(props) {
     </div>
   )
 }
-
+// updateArticle(art.article_id, art)
 // 🔥 No touchy: Articles expects the following props exactly:
 Articles.propTypes = {
   articles: PT.arrayOf(PT.shape({ // the array can be empty

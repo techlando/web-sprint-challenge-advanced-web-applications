@@ -12,6 +12,8 @@ import ProtectedRoute from "./ProtectedRoute";
 const articlesUrl = 'http://localhost:9000/api/articles'
 const loginUrl = 'http://localhost:9000/api/login'
 
+const initialFormValues = { title: '', text: '', topic: '' }
+
 export default function App() {
   
   // ✨ MVP can be achieved with these states
@@ -20,7 +22,9 @@ export default function App() {
   const [currentArticleId, setCurrentArticleId] = useState()
   const [spinnerOn, setSpinnerOn] = useState(false)
 
-
+  const [articleToEdit, setArticleToEdit] = useState(false)
+  const [values, setValues] = useState(initialFormValues)
+ 
 
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
@@ -117,18 +121,27 @@ export default function App() {
     
   }
 
-  const updateArticle = ( article_id, title, text, topic ) => {
+  const updateArticle = ( article_id, article ) => {
     // ✨ implement
     // You got this!
+
+    setSpinnerOn(true)
+    setMessage("")
     const token = localStorage.getItem("token")
     
-    axios.put(`http://localhost:9000/api/articles/${article_id}`, title, text, topic, {
+    axios.put(`http://localhost:9000/api/articles/${article_id}`, article, {
       headers: {
         authorization: token
       }
     })
     .then(res => {
       console.log(res)
+     
+      getArticles()
+      setValues(initialFormValues)
+      setMessage(res.data.message)
+      
+
     })
     .catch(err => {
       console.log(err)
@@ -188,8 +201,8 @@ export default function App() {
           <Route path="articles" element={
             <>
               
-              <ArticleForm  postArticle={postArticle} currentArticle={currentArticleId} setCurrentArticleId={setCurrentArticleId} message={message} setMessage={setMessage} updateArticle={updateArticle} articles={articles} setArticles={setArticles}/>
-              <Articles  deleteArticle={deleteArticle}postArticle={postArticle} message={message} getArticles={getArticles} setMessage={setMessage}  articles={articles} setArticles={setArticles} updateArticle={updateArticle}/>
+              <ArticleForm  setCurrentArticleId={setCurrentArticleId} currentArticleId={currentArticleId} values={values} setValues={setValues} postArticle={postArticle} currentArticle={currentArticleId} setCurrentArticleId={setCurrentArticleId} message={message} setMessage={setMessage} updateArticle={updateArticle} articles={articles} setArticles={setArticles} articleToEdit={articleToEdit} setArticleToEdit={setArticleToEdit}/>
+              <Articles  setCurrentArticleId={setCurrentArticleId}currentArticleId={currentArticleId}values={values} setValues={setValues}articleToEdit={articleToEdit} setArticleToEdit={setArticleToEdit}deleteArticle={deleteArticle}postArticle={postArticle} message={message} getArticles={getArticles} setMessage={setMessage}  articles={articles} setArticles={setArticles} updateArticle={updateArticle}/>
             </>
           } />
         </Routes>

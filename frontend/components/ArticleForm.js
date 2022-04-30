@@ -5,12 +5,12 @@ import axios from "axios";
 const initialFormValues = { title: '', text: '', topic: '' }
 
 export default function ArticleForm(props) {
-  const [values, setValues] = useState(initialFormValues)
+  // const [values, setValues] = useState(initialFormValues)
   // ✨ where are my props? Destructure them here
 
-  const { articles, setArticles, setMessage, message, currentArticle, currentArticleId, postArticle, updateArticle } = props
+  const {  values, setValues, articleToEdit, setArticleToEdit, articles, setArticles, setMessage, message, currentArticle, currentArticleId, postArticle, updateArticle } = props
   
-
+//  console.log(props)
 
   useEffect(() => {
     
@@ -26,59 +26,28 @@ export default function ArticleForm(props) {
   }
 
   const onSubmit = evt => {
+  if(articleToEdit === true ){
+    console.log("happy path")
+    updateArticle(currentArticleId, values)
     
+  } else {
+     postArticle(values)
+      setValues(initialFormValues);
+    console.log("here i am sad")
+  }
     evt.preventDefault()
-    postArticle(values)
-    setValues(initialFormValues);
-    // ✨ implement
-    // We must submit a new post or update an existing one,
-    // depending on the truthyness of the `currentArticle` prop.
-    // axios.post("http://localhost:9000/api/articles", values, {
-    //   headers: {
-    //     authorization: token
-    //   }
-    // })
-    // .then(res => {
-      
-      // console.log(res.data.article.article_id)
-      // setArticles(articles.map(art => {
-      //   console.log(art)
-      // }))
-     
-      
-      // console.log(articles)
-      // setArticles(articles.map(article => {
-      //   console.log(article)
-      //   // if(article.id === res.data.article.id) {
-      //   //   return console.log(res.data.article)
-      //   // } else {
-      //   //   return console.log("else",article)
-      //   // }
-      // })
-      // )
-      // setMessage(res.data.message)
-      // setValues(initialFormValues)
-      
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    // })
    
-    // axios.get("http://localhost:9000/api/articles", {
-    //   headers: {
-    //     authorization: token
-    //   }
-    // })
-    // .then(res => {
-      // console.log(res)
-      // setArticles(res.data.articles)
-      // setMessage(res.data.message)
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    // })
+   
+      // postArticle(values)
+      // setValues(initialFormValues);
 
    
+  }
+
+  const cancelEdit = (e) => {
+    e.preventDefault()
+    setValues(initialFormValues)
+    setArticleToEdit(false)
   }
 
 
@@ -95,8 +64,13 @@ export default function ArticleForm(props) {
   return (
     // ✨ fix the JSX: make the heading display either "Edit" or "Create"
     // and replace Function.prototype with the correct function
+
+  <div> 
     <form id="form" onSubmit={onSubmit}>
-      <h2>Create Article</h2>
+       {articleToEdit ? 
+         <h2>Edit Article</h2> : <h2>Create Article</h2>
+       }
+      {/* <h2>Create Article</h2> */}
       <input
         maxLength={50}
         onChange={onChange}
@@ -117,11 +91,21 @@ export default function ArticleForm(props) {
         <option value="React">React</option>
         <option value="Node">Node</option>
       </select>
-      <div className="button-group">
-        <button  disabled={!values.text } id="submitArticle">Submit</button>
-        <button onClick={Function.prototype}>Cancel edit</button>
-      </div>
+      {/* <div className="button-group">  */}
+
+      {!articleToEdit ? <div className="button-group"> 
+       <button  disabled={!values.text } id="submitArticle">Submit</button> </div>
+      //  <button onClick={cancelEdit}>Cancel edit</button> 
+      :
+      <div className="button-group"> 
+       <button  disabled={!values.text } id="submitArticle">Submit</button>
+       <button onClick={cancelEdit}>Cancel edit</button> 
+       </div> }
+        
+        
+      {/* </div> */}
     </form>
+  </div>
   )
 }
 
